@@ -1,0 +1,11 @@
+_format_version: "2.1"
+
+services:
+  - name: graphql-service
+    url: https://soho-test1-dapp.portkey.finance/AElfIndexer_DApp/PortKeyIndexerCASchema/graphql
+
+routes:
+  - name: graphql-route
+    paths:
+      - /portkey-graphql
+    service: graphql-service
