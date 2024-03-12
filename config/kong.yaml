@@ -1,11 +1,123 @@
 _format_version: "2.1"
 
 services:
-  - name: graphql-service
-    url: https://soho-test1-dapp.portkey.finance/AElfIndexer_DApp/PortKeyIndexerCASchema/graphql
+  - name: portkey-service
+    url: https://dapp-portkey.portkey.finance/Portkey_DID/PortKeyIndexerCASchema/graphql
+  - name: portkey-test-service
+    url: https://dapp-portkey-test.portkey.finance/Portkey_DID/PortKeyIndexerCASchema/graphql
+  - name: beanGoTown-service
+    url: https://dapp.beangotown.com/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/graphql
+  - name: verify-token-service
+    url: http://192.168.64.201:5001/api/app/account/verifyTelegramToken
+  - name: register-service
+    url: https://test3-applesign-v2.portkey.finance/api/app/account/register/request
+  - name: poll-register-service
+    url: https://test3-applesign-v2.portkey.finance/api/app/search/accountregisterindex
+  - name: get-account-service
+    url: https://test3-applesign-v2.portkey.finance/api/app/account/registerInfo
+  - name: get-guardian-service
+    url: https://test3-applesign-v2.portkey.finance/api/app/account/guardianIdentifiers
+  - name: get-verifier-service
+    url: https://test3-applesign-v2.portkey.finance/api/app/account/getVerifierServer
 
 routes:
-  - name: graphql-route
+  - name: portkey-route
     paths:
       - /portkey-graphql
-    service: graphql-service
+    service: portkey-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+      - name: rate-limiting
+        config:
+          minute: 10
+  - name: portkey-test-route
+    paths:
+      - /portkey-test-graphql
+    service: portkey-test-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+      - name: rate-limiting
+        config:
+          minute: 10
+  - name: beangotown-route
+    paths:
+      - /beangotown-graphql
+    service: beanGoTown-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+      - name: rate-limiting
+        config:
+          minute: 10
+  - name: verify-token-route
+    paths:
+      - /api/app/account/verifyTelegramToken
+    service: verify-token-service
+    plugins:
+      - name: response-transformer
+        config: 
+          append:
+            headers: ["Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true"]
+  - name: register-route
+    paths:
+      - /api/app/account/register/request
+    service: register-service
+    plugins:
+      - name: response-transformer
+        config:
+          append:
+            headers: [ "Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true" ]
+  - name: poll-register-route
+    paths:
+      - /api/app/search/accountregisterindex
+    service: poll-register-service
+    plugins:
+      - name: response-transformer
+        config:
+          append:
+            headers: [ "Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: ngrok-skip-browser-warning, access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true", "ngrok-skip-browser-warning:true" ]
+  - name: get-account-route
+    paths:
+      - /api/app/account/registerInfo
+    service: get-account-service
+    plugins:
+      - name: response-transformer
+        config:
+          append:
+            headers: ["Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: ngrok-skip-browser-warning, access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true", "ngrok-skip-browser-warning:true" ]
+  - name: get-guardian-route
+    paths:
+      - /api/app/account/guardianIdentifiers
+    service: get-guardian-service
+    plugins:
+      - name: response-transformer
+        config:
+          append:
+            headers: ["Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: ngrok-skip-browser-warning, access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true", "ngrok-skip-browser-warning:true" ]
+  - name: get-verifier-route
+    paths:
+      - /api/app/account/getVerifierServer
+    service: get-verifier-service
+    plugins:
+      - name: response-transformer
+        config:
+          append:
+            headers: ["Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: ngrok-skip-browser-warning, access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true", "ngrok-skip-browser-warning:true" ]
+
+consumers:
+  - username: xibo
+  - username: nus-workshop
+
+basicauth_credentials:
+  - consumer: xibo
+    username: xibo
+    password: test
+
+  - consumer: nus-workshop
+    username: nus
+    password: workshop
