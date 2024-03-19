@@ -1,0 +1,185 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml --out out convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.service: kong
+  name: kong
+spec:
+  ports:
+    - name: "9001"
+      port: 9001
+      targetPort: 9001
+    - name: "8443"
+      port: 8443
+      targetPort: 8443
+    - name: "8001"
+      port: 8001
+      targetPort: 8001
+    - name: "8444"
+      port: 8444
+      targetPort: 8444
+    - name: "8002"
+      port: 8002
+      targetPort: 8002
+  selector:
+    io.kompose.service: kong
+
+---
+apiVersion: v1
+data:
+  kong_postgres_password: ""
+kind: Secret
+metadata:
+  labels:
+    io.kompose.service: kong_postgres_password
+  name: kong-postgres-password
+type: Opaque
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml --out out convert
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.network/kong-kong-net: "true"
+    io.kompose.service: kong
+  name: kong
+spec:
+  containers:
+    - env:
+        - name: KONG_ADMIN_ACCESS_LOG
+          value: /dev/stdout
+        - name: KONG_ADMIN_ERROR_LOG
+          value: /dev/stderr
+        - name: KONG_ADMIN_GUI_LISTEN
+          value: 0.0.0.0:8002
+        - name: KONG_ADMIN_LISTEN
+          value: 0.0.0.0:8001
+        - name: KONG_DATABASE
+          value: "off"
+        - name: KONG_DECLARATIVE_CONFIG
+          value: /opt/kong/kong.yaml
+        - name: KONG_PG_DATABASE
+          value: kong
+        - name: KONG_PG_HOST
+          value: db
+        - name: KONG_PG_PASSWORD_FILE
+          value: /run/secrets/kong_postgres_password
+        - name: KONG_PG_USER
+          value: kong
+        - name: KONG_PREFIX
+          value: /var/run/kong
+        - name: KONG_PROXY_ACCESS_LOG
+          value: /dev/stdout
+        - name: KONG_PROXY_ERROR_LOG
+          value: /dev/stderr
+        - name: KONG_PROXY_LISTEN
+          value: 0.0.0.0:9001
+      image: kong:latest
+      livenessProbe:
+        exec:
+          command:
+            - kong
+            - health
+        failureThreshold: 10
+        periodSeconds: 10
+        timeoutSeconds: 10
+      name: kong
+      ports:
+        - containerPort: 9001
+          hostIP: 0.0.0.0
+          hostPort: 9001
+          protocol: TCP
+        - containerPort: 8443
+          hostIP: 0.0.0.0
+          hostPort: 8443
+          protocol: TCP
+        - containerPort: 8001
+          hostIP: 127.0.0.1
+          hostPort: 8001
+          protocol: TCP
+        - containerPort: 8444
+          hostIP: 127.0.0.1
+          hostPort: 8444
+          protocol: TCP
+        - containerPort: 8002
+          hostIP: 127.0.0.1
+          hostPort: 8002
+          protocol: TCP
+      securityContext:
+        readOnlyRootFilesystem: true
+      volumeMounts:
+        - mountPath: /run/secrets/kong_postgres_password
+          name: kong_postgres_password
+        - mountPath: /var/run/kong
+          name: kong-prefix-vol
+        - mountPath: /tmp
+          name: kong-tmp-vol
+        - mountPath: /opt/kong
+          name: kong-claim2
+  restartPolicy: OnFailure
+  volumes:
+    - name: kong_postgres_password
+      secret:
+        items:
+          - key: kong_postgres_password
+            path: kong_postgres_password
+        secretName: kong_postgres_password
+    - name: kong-prefix-vol
+      persistentVolumeClaim:
+        claimName: kong-prefix-vol
+    - name: kong-tmp-vol
+      persistentVolumeClaim:
+        claimName: kong-tmp-vol
+    - name: kong-claim2
+      persistentVolumeClaim:
+        claimName: kong-claim2
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: kong-prefix-vol
+  name: kong-prefix-vol
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: kong-tmp-vol
+  name: kong-tmp-vol
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: kong-claim2
+  name: kong-claim2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+

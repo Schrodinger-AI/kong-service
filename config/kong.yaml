@@ -60,14 +60,9 @@ routes:
       #     minute: 10
 
 consumers:
-  - username: xibo
-  - username: nus-workshop
+  - username: AElf-dev
 
 basicauth_credentials:
-  - consumer: xibo
-    username: xibo
-    password: test
-
   - consumer: AElf-dev
     username: aelf
     password: aelf2024
