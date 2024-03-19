@@ -1,113 +1,63 @@
 _format_version: "2.1"
 
 services:
-  - name: portkey-service
-    url: https://dapp-portkey.portkey.finance/Portkey_DID/PortKeyIndexerCASchema/graphql
-  - name: portkey-test-service
-    url: https://dapp-portkey-test.portkey.finance/Portkey_DID/PortKeyIndexerCASchema/graphql
-  - name: beanGoTown-service
-    url: https://dapp.beangotown.com/AElfIndexer_BeangoTown/BeangoTownIndexerPluginSchema/graphql
-  - name: verify-token-service
-    url: http://192.168.64.201:5001/api/app/account/verifyTelegramToken
-  - name: register-service
-    url: https://test3-applesign-v2.portkey.finance/api/app/account/register/request
-  - name: poll-register-service
-    url: https://test3-applesign-v2.portkey.finance/api/app/search/accountregisterindex
-  - name: get-account-service
-    url: https://test3-applesign-v2.portkey.finance/api/app/account/registerInfo
-  - name: get-guardian-service
-    url: https://test3-applesign-v2.portkey.finance/api/app/account/guardianIdentifiers
-  - name: get-verifier-service
-    url: https://test3-applesign-v2.portkey.finance/api/app/account/getVerifierServer
+  - name: image-process-service
+    url: http://35.202.61.156/image/process
+  
+  - name: image-generate-service
+    url: http://35.202.61.156/image/generate
+  
+  - name: image-query-service
+    url: http://35.202.61.156/image/query
+
+  - name: image-inspect-service
+    url: http://35.202.61.156/image/inspect
 
 routes:
-  - name: portkey-route
+  - name: image-process-route
     paths:
-      - /portkey-graphql
-    service: portkey-service
+      - /kong/image/process
+    service: image-process-service
     plugins:
       - name: basic-auth
         config:
           hide_credentials: true
-      - name: rate-limiting
-        config:
-          minute: 10
-  - name: portkey-test-route
+      # - name: rate-limiting
+      #   config:
+      #     minute: 10
+  - name: image-generate-route
     paths:
-      - /portkey-test-graphql
-    service: portkey-test-service
+      - /kong/image/generate
+    service: image-generate-service
     plugins:
       - name: basic-auth
         config:
           hide_credentials: true
-      - name: rate-limiting
-        config:
-          minute: 10
-  - name: beangotown-route
+      # - name: rate-limiting
+      #   config:
+      #     minute: 10
+  - name: image-query-route
     paths:
-      - /beangotown-graphql
-    service: beanGoTown-service
+      - /kong/image/query
+    service: image-query-service
     plugins:
       - name: basic-auth
         config:
           hide_credentials: true
-      - name: rate-limiting
-        config:
-          minute: 10
-  - name: verify-token-route
+      # - name: rate-limiting
+      #   config:
+      #     minute: 10
+  - name: image-inspect-route
     paths:
-      - /api/app/account/verifyTelegramToken
-    service: verify-token-service
+      - /kong/image/inspect
+    service: image-query-service
     plugins:
-      - name: response-transformer
-        config: 
-          append:
-            headers: ["Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true"]
-  - name: register-route
-    paths:
-      - /api/app/account/register/request
-    service: register-service
-    plugins:
-      - name: response-transformer
+      - name: basic-auth
         config:
-          append:
-            headers: [ "Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true" ]
-  - name: poll-register-route
-    paths:
-      - /api/app/search/accountregisterindex
-    service: poll-register-service
-    plugins:
-      - name: response-transformer
-        config:
-          append:
-            headers: [ "Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: ngrok-skip-browser-warning, access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true", "ngrok-skip-browser-warning:true" ]
-  - name: get-account-route
-    paths:
-      - /api/app/account/registerInfo
-    service: get-account-service
-    plugins:
-      - name: response-transformer
-        config:
-          append:
-            headers: ["Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: ngrok-skip-browser-warning, access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true", "ngrok-skip-browser-warning:true" ]
-  - name: get-guardian-route
-    paths:
-      - /api/app/account/guardianIdentifiers
-    service: get-guardian-service
-    plugins:
-      - name: response-transformer
-        config:
-          append:
-            headers: ["Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: ngrok-skip-browser-warning, access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true", "ngrok-skip-browser-warning:true" ]
-  - name: get-verifier-route
-    paths:
-      - /api/app/account/getVerifierServer
-    service: get-verifier-service
-    plugins:
-      - name: response-transformer
-        config:
-          append:
-            headers: ["Access-Control-Allow-Methods:GET,HEAD,OPTIONS,POST,PUT","Access-Control-Allow-Headers: ngrok-skip-browser-warning, access-control-allow-methods, access-control-allow-origin, access-control-allow-credentials, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers", "Access-Control-Allow-Credentials:true", "ngrok-skip-browser-warning:true" ]
+          hide_credentials: true
+      # - name: rate-limiting
+      #   config:
+      #     minute: 10
 
 consumers:
   - username: xibo
