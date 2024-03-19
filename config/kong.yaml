@@ -12,6 +12,58 @@ services:
 
   - name: image-inspect-service
     url: http://35.202.61.156/image/inspect
+  
+  - name: set-config-service
+    url: http://35.202.61.156/prompt/set-config
+  
+  - name: get-config-service
+    url: http://35.202.61.156/prompt/get-config
+
+  - name: switch-identifier-service
+    url: http://35.202.61.156/prompt/switch-identifier
+
+  - name: prompt-generate-service
+    url: http://35.202.61.156/prompt/generate
+  
+  - name: get-current-config-service
+    url: http://35.202.61.156/prompt/get-current-config
+  
+  - name: get-all-config-service
+    url: http://35.202.61.156/prompt/get-all-config
+  
+  - name: scheduler-add-service
+    url: http://35.202.61.156/scheduler/add
+  
+  - name: scheduler-service
+    url: http://35.202.61.156/scheduler
+  
+  - name: scheduler-apiKeysUsageInfo-service
+    url: http://35.202.61.156/scheduler/apiKeysUsageInfo
+  
+  - name: scheduler-remove-service
+    url: http://35.202.61.156/scheduler/remove
+  
+  - name: scheduler-isOverloaded-service
+    url: http://35.202.61.156/scheduler/isOverloaded
+
+  - name: scheduler-states-service
+    url: http://35.202.61.156/scheduler/states
+
+  - name: traits-add-service
+    url: http://35.202.61.156/traits/add
+  
+  - name: traits-clear-service
+    url: http://35.202.61.156/traits/clear
+  
+  - name: traits-delete-service
+    url: http://35.202.61.156/traits/
+  
+  - name: traits-get-service
+    url: http://35.202.61.156/traits/
+  
+  - name: traits-service
+    url: http://35.202.61.156/traits
+
 
 routes:
   - name: image-process-route
@@ -58,6 +110,148 @@ routes:
       # - name: rate-limiting
       #   config:
       #     minute: 10
+  - name: set-config-route
+    paths:
+      - /kong/prompt/set-config
+    service: set-config-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: switch-identifier-route
+    paths:
+      - /kong/prompt/switch-identifier
+    service: switch-identifier-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: prompt-generate-route
+    paths:
+      - /kong/prompt/generate
+    service: prompt-generate-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: scheduler-add-route
+    paths:
+      - /kong/scheduler/add
+    service: scheduler-add-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: scheduler-remove-route
+    paths:
+      - /kong/scheduler/remove
+    service: scheduler-remove-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: traits-add-route
+    paths:
+      - /kong/traits/add
+    service: traits-add-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: traits-clear-route
+    paths:
+      - /kong/traits/clear
+    service: traits-clear-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: get-config-route
+    paths:
+      - /kong/prompt/get-config
+    service: get-config-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: get-current-config-route
+    paths:
+      - /kong/prompt/get-current-config
+    service: get-current-config-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: get-all-config-route
+    paths:
+      - /kong/prompt/get-all-config
+    service: get-all-config-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: scheduler-route
+    paths:
+      - /kong/scheduler
+    service: scheduler-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: scheduler-apiKeysUsageInfo-route
+    paths:
+      - /kong/scheduler/apiKeysUsageInfo
+    service: scheduler-apiKeysUsageInfo-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: scheduler-isOverloaded-route
+    paths:
+      - /kong/scheduler/isOverloaded
+    service: scheduler-isOverloaded-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: scheduler-states-route
+    paths:
+      - /kong/scheduler/states
+    service: scheduler-states-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: traits-delete-route
+    paths:
+      - /kong/traits/
+    methods:
+      - DELETE
+    service: traits-delete-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: traits-get-route
+    paths:
+      - /kong/traits/
+    methods:
+      - GET
+    service: traits-get-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
+  - name: traits-route
+    paths:
+      - /kong/traits
+    methods:
+      - GET
+    service: traits-service
+    plugins:
+      - name: basic-auth
+        config:
+          hide_credentials: true
 
 consumers:
   - username: AElf-dev
