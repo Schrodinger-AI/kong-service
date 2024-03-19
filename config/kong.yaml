@@ -68,6 +68,6 @@ basicauth_credentials:
     username: xibo
     password: test
 
-  - consumer: nus-workshop
-    username: nus
-    password: workshop
+  - consumer: AElf-dev
+    username: aelf
+    password: aelf2024
