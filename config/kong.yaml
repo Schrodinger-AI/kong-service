@@ -2,67 +2,67 @@ _format_version: "2.1"
 
 services:
   - name: image-process-service
-    url: http://35.202.61.156/image/process
+    url: http://10.128.0.25/image/process
   
   - name: image-generate-service
-    url: http://35.202.61.156/image/generate
+    url: http://10.128.0.25/image/generate
   
   - name: image-query-service
-    url: http://35.202.61.156/image/query
+    url: http://10.128.0.25/image/query
 
   - name: image-inspect-service
-    url: http://35.202.61.156/image/inspect
+    url: http://10.128.0.25/image/inspect
   
   - name: set-config-service
-    url: http://35.202.61.156/prompt/set-config
+    url: http://10.128.0.25/prompt/set-config
   
   - name: get-config-service
-    url: http://35.202.61.156/prompt/get-config
+    url: http://10.128.0.25/prompt/get-config
 
   - name: switch-identifier-service
-    url: http://35.202.61.156/prompt/switch-identifier
+    url: http://10.128.0.25/prompt/switch-identifier
 
   - name: prompt-generate-service
-    url: http://35.202.61.156/prompt/generate
+    url: http://10.128.0.25/prompt/generate
   
   - name: get-current-config-service
-    url: http://35.202.61.156/prompt/get-current-config
+    url: http://10.128.0.25/prompt/get-current-config
   
   - name: get-all-config-service
-    url: http://35.202.61.156/prompt/get-all-config
+    url: http://10.128.0.25/prompt/get-all-config
   
   - name: scheduler-add-service
-    url: http://35.202.61.156/scheduler/add
+    url: http://10.128.0.25/scheduler/add
   
   - name: scheduler-service
-    url: http://35.202.61.156/scheduler
+    url: http://10.128.0.25/scheduler
   
   - name: scheduler-apiKeysUsageInfo-service
-    url: http://35.202.61.156/scheduler/apiKeysUsageInfo
+    url: http://10.128.0.25/scheduler/apiKeysUsageInfo
   
   - name: scheduler-remove-service
-    url: http://35.202.61.156/scheduler/remove
+    url: http://10.128.0.25/scheduler/remove
   
   - name: scheduler-isOverloaded-service
-    url: http://35.202.61.156/scheduler/isOverloaded
+    url: http://10.128.0.25/scheduler/isOverloaded
 
   - name: scheduler-states-service
-    url: http://35.202.61.156/scheduler/states
+    url: http://10.128.0.25/scheduler/states
 
   - name: traits-add-service
-    url: http://35.202.61.156/traits/add
+    url: http://10.128.0.25/traits/add
   
   - name: traits-clear-service
-    url: http://35.202.61.156/traits/clear
+    url: http://10.128.0.25/traits/clear
   
   - name: traits-delete-service
-    url: http://35.202.61.156/traits/
+    url: http://10.128.0.25/traits/
   
   - name: traits-get-service
-    url: http://35.202.61.156/traits/
+    url: http://10.128.0.25/traits/
   
   - name: traits-service
-    url: http://35.202.61.156/traits
+    url: http://10.128.0.25/traits
 
 
 routes:
